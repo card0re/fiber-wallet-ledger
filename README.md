@@ -13,13 +13,26 @@ A lightning-fast, secure transactional ledger API built with **Go** and the **Fi
 - **Database ORM:** GORM (`gorm.io/gorm`)
 - **Driver:** SQLite (local persistence)
 
-## ⚙️ Setup & Installation
+## ⚙️ Run
 
-1. Clone the repository.
-2. Install dependencies:
-   ```bash
-   go mod init [github.com/card0re/fiber-wallet-ledger](https://github.com/card0re/fiber-wallet-ledger)
-   go get [github.com/gofiber/fiber/v2](https://github.com/gofiber/fiber/v2)
-   go get gorm.io/gorm
-   go get gorm.io/driver/sqlite
-   go mod tidy
+```bash
+git clone https://github.com/card0re/fiber-wallet-ledger.git
+cd fiber-wallet-ledger
+go run .            # listens on :3000 (override with PORT), creates ledger.db
+```
+
+## 📡 API
+
+| Method | Path | Description |
+|---|---|---|
+| POST | `/api/v1/admin/demo-setup` | Create demo account `DEMO-12345` |
+| GET | `/api/v1/account/:id/balance` | Get balances |
+| POST | `/api/v1/transaction/send` | Transfer funds (atomic) |
+
+```bash
+curl -X POST http://localhost:3000/api/v1/admin/demo-setup
+curl -X POST http://localhost:3000/api/v1/transaction/send \
+  -H "Content-Type: application/json" \
+  -d '{"account_id":"DEMO-12345","target_address":"0xabc","amount":10,"coin_type":"USDT"}'
+curl http://localhost:3000/api/v1/account/DEMO-12345/balance
+```
